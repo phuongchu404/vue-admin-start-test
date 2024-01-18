@@ -73,7 +73,7 @@ const request: IRequestMethod = function <T>(
     loading = false,
     loadingText = 'Loading',
     loadingLock = true,
-    dataType = 'json'
+    dataType = 'json' || 'formData'
   } = {}
 ) {
   if (mock && import.meta.env.VITE_APP_MOCK_API) {
@@ -95,7 +95,8 @@ const request: IRequestMethod = function <T>(
 
   if (dataType === 'formData') {
     defaultHeaders = {
-      'Content-Type': 'application/x-www-form-urlencoded' // 发送 formData 数据格式
+      // 'Content-Type': 'application/x-www-form-urlencoded' // 发送 formData 数据格式
+      'Content-Type': 'multipart/form-data'
     }
 
     option.data = qs.stringify(option.data)

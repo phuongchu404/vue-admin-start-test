@@ -1,93 +1,126 @@
 <template>
-  <div class="dashboard-container">
-    <div class="state-overview">
-      <el-card class="state-overview__item" />
-      <el-card class="state-overview__item" />
-      <el-card class="state-overview__item" />
-      <el-card class="state-overview__item" />
-    </div>
-
-    <div class="charts-overview">
-      <div class="charts-overview__left">
-        <el-card class="charts-overview__left__inner"></el-card>
-      </div>
-      <div class="charts-overview__right">
-        <el-card class="charts-overview__right__inner mb-16"></el-card>
-        <el-card class="charts-overview__right__inner"></el-card>
-      </div>
-    </div>
-
-    <div class="work-progress">
-      <el-card class="work-progress__item"></el-card>
-      <el-card class="work-progress__item"></el-card>
-    </div>
-  </div>
+  <div class="dashboard-container">Home</div>
+  <el-upload
+    list-type="picture"
+    action=""
+    :limit="1"
+    accept=".jpg, .jpeg, .png, .wsq"
+    :before-upload="handleBeforeUpload"
+    :auto-upload="false"
+    :on-change="getFile"
+    :on-preview="handlePictureCardPreview1"
+    :on-remove="handleUploadRemove"
+    :on-success="handleUploadSuccess"
+  >
+    <el-button size="small" type="primary">Tải lên</el-button>
+    <div slot="tip" class="el-upload__tip">test</div>
+  </el-upload>
+  <el-dialog v-model:visible="dialogVisibleTest">
+    <img :src="dialogImageUrlTest" alt="Preview Image" />
+  </el-dialog>
+  <el-button @click="handleTest">Default</el-button>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import type { testFile } from '@/api/test/type'
+import { testImage } from '@/api/test/index'
 defineOptions({
   name: 'DashboardView'
 })
+
+const formData: FormData = new FormData()
+const defaultForm = (): testFile => ({
+  name: 'test',
+  image: undefined
+})
+const form = ref(defaultForm())
+const listFormData: any[] = []
+function convertFormData(data: any) {
+  for (const key in data) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (data.hasOwnProperty(key)) {
+      formData.append(key, data[key])
+    }
+  }
+}
+// async function handleTest() {
+//   console.log(form.value)
+//   listFormData.push(form.value)
+//   listFormData.push(form.value)
+//   console.log(listFormData)
+//   listFormData.forEach((testRequest: any, index) => {
+//     console.log(testRequest)
+//     for (const key in testRequest) {
+//       // eslint-disable-next-line no-prototype-builtins
+//       if (testRequest.hasOwnProperty(key)) {
+//         console.log(`testRequest[${index}].${key}`)
+//         formData.append(`testRequest[${index}].${key}`, testRequest[key])
+//       }
+//     }
+//   })
+//   console.log(formData)
+//   const result = await testImage(formData)
+//   console.log(result)
+// }
+async function handleTest() {
+  convertFormData(form.value)
+  console.log(formData)
+  const result = await testImage(formData)
+  console.log(result)
+}
+function handleUploadSuccess(response: any, file: any, fileList: any) {}
+function getBase64(file: any) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    let imgResult: any = ''
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      imgResult = reader.result
+    }
+    reader.onerror = (err) => {
+      reject(err)
+    }
+    reader.onloadend = () => {
+      resolve(imgResult)
+    }
+  })
+}
+function handleBeforeUpload(file: any) {
+  const folderPath = file.webkitRelativePath.substring(0, file.webkitRelativePath.lastIndexOf('/'))
+
+  // Sử dụng đường dẫn thư mục theo nhu cầu của bạn
+  console.log('Đường dẫn thư mục:', folderPath)
+
+  // Tiếp tục xử lý tệp tin nếu cần thiết
+  return true
+}
+let dialogImageUrlTest = ref('')
+let dialogVisibleTest = ref(false)
+let prooImage: any = ''
+let formtes
+async function getFile(file: any, fileList: any) {
+  dialogImageUrlTest.value = file.url
+  form.value.image = file.raw
+  getBase64(file.raw).then((res: any) => {
+    const params = res.split(',')
+    if (params.length > 0) {
+      prooImage = params[1]
+    }
+  })
+}
+function handleUploadRemove(file: any, fileList: any) {
+  prooImage = ''
+}
+
+const handlePictureCardPreview1 = (file: any) => {
+  dialogImageUrlTest.value = file.url
+  dialogVisibleTest.value = true
+}
 </script>
 
 <style lang="scss" scoped>
 .dashboard-container {
   padding: 16px;
-  max-width: 1380px;
-  margin: 0 auto;
-}
-
-.state-overview {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-
-  &__item {
-    flex: 1;
-    margin-right: 16px;
-    min-height: 120px;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
-  }
-}
-
-.charts-overview {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-
-  &__left {
-    flex: 0.7;
-    margin-right: 16px;
-
-    &__inner {
-      height: 420px;
-    }
-  }
-
-  &__right {
-    flex: 0.3;
-
-    &__inner {
-      height: 202px;
-    }
-  }
-}
-
-.work-progress {
-  display: flex;
-  justify-content: space-between;
-
-  &__item {
-    flex: 1;
-    height: 280px;
-
-    &:first-of-type {
-      flex: 0.3;
-      margin-right: 16px;
-    }
-  }
 }
 </style>

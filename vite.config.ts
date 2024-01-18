@@ -68,7 +68,7 @@ export default defineConfig(({ mode }) => {
   if (VITE_APP_PROXY_TARGET) {
     config.server = Object.assign({}, config.server, {
       proxy: {
-        '/api/v1': {
+        '/api/teca': {
           target: VITE_APP_PROXY_TARGET,
           changeOrigin: true
         }
