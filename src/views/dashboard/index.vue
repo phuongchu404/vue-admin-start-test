@@ -35,7 +35,7 @@ const defaultForm = (): testFile => ({
   image: undefined
 })
 const form = ref(defaultForm())
-const listFormData: any[] = []
+const listFormData: testFile[] = []
 function convertFormData(data: any) {
   for (const key in data) {
     // eslint-disable-next-line no-prototype-builtins
@@ -43,6 +43,12 @@ function convertFormData(data: any) {
       formData.append(key, data[key])
     }
   }
+}
+async function handleTest() {
+  listFormData.push(form.value)
+  listFormData.push(form.value)
+  console.log(listFormData)
+  formData.append('listTest', listFormData.toString())
 }
 // async function handleTest() {
 //   console.log(form.value)
@@ -63,12 +69,12 @@ function convertFormData(data: any) {
 //   const result = await testImage(formData)
 //   console.log(result)
 // }
-async function handleTest() {
-  convertFormData(form.value)
-  console.log(formData)
-  const result = await testImage(formData)
-  console.log(result)
-}
+// async function handleTest() {
+//   convertFormData(form.value)
+//   console.log(formData)
+//   const result = await testImage(formData)
+//   console.log(result)
+// }
 function handleUploadSuccess(response: any, file: any, fileList: any) {}
 function getBase64(file: any) {
   return new Promise((resolve, reject) => {
