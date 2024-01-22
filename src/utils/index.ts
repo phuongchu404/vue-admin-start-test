@@ -18,7 +18,6 @@ export function paramsVerify<T extends Object>(obj: T, excludeKey?: any[]): T {
   Object.keys(obj).forEach((key) => {
     const val = (<any>obj)[key]
     if ((!isEmpty(val) && val !== '' && val !== -9) || (excludeKey && excludeKey.includes(key))) {
-      // 规定 -9 number类型默认值，相当于''
       ;(<any>res)[key] = val
     }
   })

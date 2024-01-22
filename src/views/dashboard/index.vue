@@ -44,31 +44,57 @@ function convertFormData(data: any) {
     }
   }
 }
-async function handleTest() {
-  listFormData.push(form.value)
-  listFormData.push(form.value)
-  console.log(listFormData)
-  formData.append('listTest', listFormData.toString())
+function fileToByteArray(file: any) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const arrayBuffer: any = reader.result
+      const byteArray = new Uint8Array(arrayBuffer)
+      resolve(byteArray)
+    }
+    reader.onerror = (error) => {
+      reject(error)
+    }
+    reader.readAsArrayBuffer(file)
+  })
 }
 // async function handleTest() {
-//   console.log(form.value)
 //   listFormData.push(form.value)
 //   listFormData.push(form.value)
 //   console.log(listFormData)
-//   listFormData.forEach((testRequest: any, index) => {
-//     console.log(testRequest)
-//     for (const key in testRequest) {
-//       // eslint-disable-next-line no-prototype-builtins
-//       if (testRequest.hasOwnProperty(key)) {
-//         console.log(`testRequest[${index}].${key}`)
-//         formData.append(`testRequest[${index}].${key}`, testRequest[key])
-//       }
-//     }
-//   })
-//   console.log(formData)
-//   const result = await testImage(formData)
+//   const result = await testImage(listFormData)
 //   console.log(result)
 // }
+async function getFile(file: any, fileList: any) {
+  dialogImageUrlTest.value = file.url
+  form.value.image = file.raw
+  getBase64(file.raw).then((res: any) => {
+    const params = res.split(',')
+    if (params.length > 0) {
+      prooImage = params[1]
+    }
+  })
+}
+async function handleTest() {
+  console.log(form.value)
+  listFormData.push(form.value)
+  listFormData.push(form.value)
+  console.log(listFormData)
+  listFormData.forEach((testRequest: any, index) => {
+    console.log(testRequest)
+    for (const key in testRequest) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (testRequest.hasOwnProperty(key)) {
+        formData.append(key, testRequest[key])
+      }
+    }
+  })
+  for (let i of formData.entries()) {
+    console.log(i)
+  }
+  const result = await testImage(formData)
+  console.log(result)
+}
 // async function handleTest() {
 //   convertFormData(form.value)
 //   console.log(formData)
@@ -104,17 +130,7 @@ function handleBeforeUpload(file: any) {
 let dialogImageUrlTest = ref('')
 let dialogVisibleTest = ref(false)
 let prooImage: any = ''
-let formtes
-async function getFile(file: any, fileList: any) {
-  dialogImageUrlTest.value = file.url
-  form.value.image = file.raw
-  getBase64(file.raw).then((res: any) => {
-    const params = res.split(',')
-    if (params.length > 0) {
-      prooImage = params[1]
-    }
-  })
-}
+
 function handleUploadRemove(file: any, fileList: any) {
   prooImage = ''
 }

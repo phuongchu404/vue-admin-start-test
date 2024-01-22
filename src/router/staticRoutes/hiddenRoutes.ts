@@ -17,14 +17,6 @@ export const hiddenRoutes: IRouteRecord[] = [
     ]
   },
   {
-    path: '/login',
-    name: 'LoginView',
-    meta: {
-      hidden: true
-    },
-    component: () => import('@/views/app/Login.vue')
-  },
-  {
     path: '/404',
     name: 'NotFound',
     meta: {

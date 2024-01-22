@@ -5,5 +5,5 @@ export const filterResourceTypeLabel = (value: number) => {
 }
 
 export const filterBoolToText = (value: number | boolean) => {
-  return value ? '是' : '否'
+  return value ? 'True' : 'False'
 }
