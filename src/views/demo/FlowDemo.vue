@@ -1,6 +1,7 @@
 <template>
   <div>
     <LogicFlow v-model="flowGraphData" />
+    tettretetr
   </div>
 </template>
 
