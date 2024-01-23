@@ -1,7 +1,7 @@
 <template>
   <div>
     <LogicFlow v-model="flowGraphData" />
-    tettretetr
+    tettretetrtesss
   </div>
 </template>
 
