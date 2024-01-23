@@ -18,13 +18,6 @@ const service = axios.create({
 // Request interceptors
 service.interceptors.request.use(
   (config) => {
-    const UserStore = useUserStore()
-
-    // Add X-Access-Token header to every request, you can add other custom headers here
-    if (UserStore.accessToken) {
-      config.headers.token = UserStore.accessToken
-    }
-
     return config
   },
   (error) => {
@@ -41,14 +34,15 @@ service.interceptors.response.use(
       return response
     }
 
-    const res = response.data
-    if (![200, 201].includes(res.status)) {
-      ElMessage.error(res.message || 'Error')
+    // const res = response.data
+    // if (![200, 201].includes(res.status)) {
+    //   ElMessage.error(res.message || 'Error')
 
-      return Promise.reject(new Error(res.message || 'Error'))
-    } else {
-      return response.data
-    }
+    //   return Promise.reject(new Error(res.message || 'Error'))
+    // } else {
+    //   return response.data
+    // }
+    return response
   },
   (error) => {
     return Promise.reject(error)
@@ -58,11 +52,11 @@ service.interceptors.response.use(
 export type IRequestMethod = <T>(
   opts: AxiosRequestConfig,
   extraOpts?: {
-    mock?: boolean // 是否为 mock 模式
-    loading?: boolean // 是否开启接口 loading 提示
-    loadingText?: string // loading 提示文本
+    mock?: boolean
+    loading?: boolean
+    loadingText?: string
     loadingLock?: boolean
-    dataType?: 'json' | 'formData' | 'formData2' // 请求的数据格式，默认 json
+    dataType?: 'json' | 'formData' | 'formData2'
   }
 ) => Promise<IAxiosResponse<T>>
 
@@ -95,14 +89,14 @@ const request: IRequestMethod = function <T>(
 
   if (dataType === 'formData') {
     defaultHeaders = {
-      // 'Content-Type': 'application/x-www-form-urlencoded' // 发送 formData 数据格式
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'application/x-www-form-urlencoded'
+      //'Content-Type': 'multipart/form-data'
     }
 
     option.data = qs.stringify(option.data)
   } else if (dataType === 'formData2') {
     defaultHeaders = {
-      'Content-Type': 'multipart/form-data' // 含文件
+      'Content-Type': 'multipart/form-data'
     }
   }
 

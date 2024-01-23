@@ -11,30 +11,6 @@
 
     <div class="right-menu">
       <LangSelect v-if="SettingStore.showLanguagePicker" class="right-menu-item hover-effect" />
-
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-          <el-icon :size="12"><CaretBottom /></el-icon>
-        </div>
-
-        <template #dropdown>
-          <el-dropdown-menu>
-            <router-link to="/">
-              <el-dropdown-item> 首页 </el-dropdown-item>
-            </router-link>
-            <a target="_blank" href="https://github.com/yisibell/">
-              <el-dropdown-item> 项目地址 </el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://github.com/yisibell/">
-              <el-dropdown-item>Docs</el-dropdown-item>
-            </a>
-            <el-dropdown-item divided @click="logout">
-              <span style="display: block"> 退出登录 </span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
     </div>
   </div>
 </template>

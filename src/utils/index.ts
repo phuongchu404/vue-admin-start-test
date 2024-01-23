@@ -1,4 +1,3 @@
-/** 验证对象或数组是否为空 */
 export const isEmpty = (obj: Object & Array<any>) => {
   if (['{}', '[]', 'null', undefined].includes(JSON.stringify(obj))) {
     return true
